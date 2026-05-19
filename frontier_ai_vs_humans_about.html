@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>About — AI vs Human Researchers slide</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#0b0e16; --panel:#141a26; --panel2:#1b2434; --ink:#e8edf6; --mute:#8e9bb1;
+    --line:#27314a;
+    --ai:#5ad1c4; --human:#f0a868; --warn:#ff7a59;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  a{color:var(--ai);text-decoration:none;border-bottom:1px solid rgba(90,209,196,0.3)}
+  a:hover{border-bottom-color:var(--ai)}
+  .wrap{max-width:980px;margin:0 auto;padding:48px 28px 120px}
+  .kicker{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--ai);padding:5px 12px;border:1px solid var(--ai);
+    border-radius:999px;background:rgba(90,209,196,0.06);margin-bottom:18px}
+  h1{font-size:42px;line-height:1.06;margin:0 0 12px;letter-spacing:-0.025em;font-weight:700}
+  h1 .ai{color:var(--ai)} h1 .human{color:var(--human)}
+  h2{font-size:24px;margin:48px 0 14px;letter-spacing:-0.012em;font-weight:600}
+  h3{font-size:11px;margin:0 0 8px;color:var(--mute);font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+  p{color:#cdd5e3;margin:0 0 14px}
+  .lead{font-size:18px;color:#dde4ee;max-width:760px}
+  .muted{color:var(--mute)}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-top:16px}
+  .panel.ai{border-left:3px solid var(--ai)}
+  .panel.human{border-left:3px solid var(--human)}
+  .panel.warn{border-left:3px solid var(--warn)}
+
+  ul{padding-left:22px;margin:0 0 8px}
+  li{margin:6px 0;color:#cdd5e3}
+  li b{color:var(--ink)}
+
+  /* Data table */
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+  .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+  .tbl th{font-weight:600;color:var(--mute);text-transform:uppercase;font-size:10.5px;letter-spacing:.12em}
+  .tbl td.num{font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+  .tbl td.ai{color:var(--ai)} .tbl td.human{color:var(--human)}
+  .tbl tr:hover td{background:rgba(255,255,255,0.015)}
+
+  .pill{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:999px;
+    font-weight:600;letter-spacing:.05em;border:1px solid currentColor}
+  .pill.ai{color:var(--ai);background:rgba(90,209,196,0.07)}
+  .pill.human{color:var(--human);background:rgba(240,168,104,0.07)}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media (max-width:760px){.twocol{grid-template-columns:1fr}}
+
+  .stat{font-size:36px;font-weight:700;letter-spacing:-0.02em;line-height:1;
+    font-variant-numeric:tabular-nums;margin:4px 0 8px}
+  .stat.ai{color:var(--ai)} .stat.human{color:var(--human)} .stat.warn{color:var(--warn)}
+
+  blockquote{margin:14px 0;padding:12px 16px;background:#0d121d;border-left:3px solid var(--ai);
+    border-radius:0 8px 8px 0;color:#dde4ee;font-size:14.5px}
+
+  hr.div{border:0;border-top:1px solid var(--line);margin:36px 0}
+
+  .nav{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+  .nav a{display:inline-block;padding:10px 18px;border:1px solid var(--ai);
+    border-radius:999px;color:var(--ai);font-size:13px;font-weight:600;letter-spacing:.02em}
+  .nav a.alt{border-color:var(--line);color:var(--mute)}
+  .nav a:hover{background:rgba(90,209,196,0.07)}
+
+  code{background:#0a0e16;padding:1px 6px;border-radius:4px;font-size:13px;color:#e8edf6;
+    font-family:ui-monospace,Menlo,Consolas,monospace}
+
+  .footnote{font-size:12px;color:var(--mute);line-height:1.55}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<span class="kicker">Design notes &middot; sources &middot; methodology</span>
+<h1>About this slide:<br>Where <span class="ai">AI</span> stands vs <span class="human">Human Researchers</span></h1>
+<p class="lead">This page documents <b>what is on the visualization, why each design choice was made, where the numbers came from, and what stakeholders should walk away believing.</b> If you are about to present the slide and someone is going to push back on a bar, the answer is on this page.</p>
+
+<div class="nav">
+  <a href="frontier_ai_vs_humans.html">&larr; Back to the slide</a>
+  <a class="alt" href="index.html">Full FrontierScience data story</a>
+</div>
+
+<!-- ============ 1. WHY ============ -->
+<h2>1 &middot; Why this slide exists</h2>
+<div class="panel">
+  <p>The OpenAI FrontierScience paper has one famous number &mdash; <b>GPT-5.2 scores 77% on the Olympiad set and 25% on the Research set</b> &mdash; and a much more interesting story underneath it: <em>AI is now superhuman on closed-form science exams and still subhuman on actual research work.</em></p>
+  <p>The original FrontierScience data story we built walks through that gap in nine sections. Useful for a deep dive. Useless for a stakeholder slide. The ask here was different:</p>
+  <blockquote>&ldquo;Build a single slide-sized view that an exec can absorb in 5&nbsp;seconds and walk away knowing where AI is winning, where humans are winning, and how the nuance plays out.&rdquo;</blockquote>
+  <p>That meant zooming out from one paper to <b>the whole AI-vs-human-researcher landscape in May 2026</b> &mdash; pulling in GPQA, HLE, FrontierMath, SWE-bench, IMO, Codeforces, ARC-AGI, RadLE, METR, AlphaFold &mdash; and reducing it to a single visual.</p>
+</div>
+
+<!-- ============ 2. WHAT ============ -->
+<h2>2 &middot; What&apos;s actually on the slide</h2>
+
+<div class="panel">
+  <h3>The visual layout, top to bottom</h3>
+  <ul>
+    <li><b>Header.</b> Title + the single most important sentence: AI beats experts on exams, but cannot do real research yet, and the gap is closing exponentially.</li>
+    <li><b>Shock strip</b> (4 mini-cards). Each one is a number designed to be quoted in the meeting: <b>93%</b> on GPQA, <b>200M</b> protein structures, <b>8% &rarr; 44.7%</b> in 16 months on HLE, <b>&lt;1%</b> on ARC-AGI-3. Two AI wins, one trajectory wake-up, one stark gap.</li>
+    <li><b>Diverging bar chart</b> (the centerpiece, 14 capabilities). AI score extends left in teal, human-expert score extends right in amber. AI-leading capabilities are stacked above human-leading ones &mdash; the visual silhouette is the story.</li>
+    <li><b>Right rail</b> (4 nuance cards). The "but&hellip;" details: AI is top-0.1% on Codeforces, IMO gold, but only 30% on hard radiology vs radiologist 83%, and METR&apos;s 4-month doubling.</li>
+    <li><b>Footer.</b> Legend + sources, plus a link back here.</li>
+  </ul>
+</div>
+
+<!-- ============ 3. DESIGN DECISIONS ============ -->
+<h2>3 &middot; Design decisions and why</h2>
+
+<div class="twocol">
+  <div class="panel ai">
+    <h3>Format: diverging horizontal bars (not a treemap)</h3>
+    <p>The brief explicitly said no treemap. A diverging bar is the right substitute because the comparison is <b>one-dimensional and oppositional</b>: each row asks "who is better at X?" and that question has a left answer or a right answer.</p>
+    <p>Bonus: vertical ordering doubles as a sort. The viewer sees AI-leading rows clumped at the top, human-leading rows at the bottom &mdash; the silhouette gives you the answer before you read a single label.</p>
+  </div>
+  <div class="panel ai">
+    <h3>Why a shock strip on top</h3>
+    <p>A stakeholder slide has to <b>hand the viewer their soundbite</b>. The four-card strip exists so anyone presenting can quote a number without zooming into the chart. The numbers were chosen for surprise value, not balance: two AI wins, one trajectory, one collapse.</p>
+  </div>
+  <div class="panel human">
+    <h3>Color: teal vs amber, not red vs green</h3>
+    <p>Red/green has a value judgement (good/bad) that this comparison shouldn&apos;t carry. Teal/amber are <b>visually distinct, colour-blind safe, and value-neutral</b>. They also match the existing FrontierScience story&apos;s palette (<code>--accent</code>, <code>--accent2</code>) so the two pages feel like one product.</p>
+  </div>
+  <div class="panel human">
+    <h3>Tooltips, not labels</h3>
+    <p>Every bar has hover-revealed AI score, human score, one-line insight, and source. Labels stay short on the chart itself, so the slide is readable as a static screenshot AND interactive when projected from a laptop.</p>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>The single-screen constraint</h3>
+  <p>Body uses <code>height:100vh;overflow:hidden</code> and a CSS grid with four rows (<code>auto auto 1fr auto</code>). The chart and right rail share the flex middle, so the slide stays composed at any 16:9-ish viewport from 1280&times;720 up to a 4K monitor. We tested down to <code>720px</code> tall via a <code>@media (max-height:720px)</code> shrink.</p>
+</div>
+
+<!-- ============ 4. DATA ============ -->
+<h2>4 &middot; The data, with sources</h2>
+<p>Every bar on the chart corresponds to a row below. AI numbers are quoted from the underlying benchmark&apos;s public leaderboard or paper. Human numbers are: <span class="pill ai">published</span> when an expert baseline exists, or <span class="pill human">structural</span> when the comparison is an order-of-magnitude attribute like speed, scale, or cost.</p>
+
+<div class="panel ai">
+  <h3>AI-leading capabilities</h3>
+  <table class="tbl">
+    <thead><tr><th>Capability</th><th>AI</th><th>Human</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><b>Multiple-choice PhD-level science</b><br><span class="muted">GPQA Diamond</span></td><td class="num ai">93</td><td class="num human">65</td><td>GPT-5.2 Pro on <a href="https://arxiv.org/abs/2311.12022">GPQA</a>. Expert baseline from Rein et&nbsp;al. 2023.</td></tr>
+      <tr><td><b>Competitive programming</b><br><span class="muted">Codeforces Elo</span></td><td class="num ai">91</td><td class="num human">80</td><td>OpenAI o3 reached <b>2727 Elo</b> ≈ top 0.1% of ~600k human competitors. <a href="https://codeforces.com/blog/entry/133874">Codeforces blog</a>.</td></tr>
+      <tr><td><b>Software engineering</b><br><span class="muted">SWE-bench Verified</span></td><td class="num ai">94</td><td class="num human">75</td><td>Claude Mythos at 93.9% on the verified split. <a href="https://www.swebench.com/verified.html">SWE-bench Verified</a>.</td></tr>
+      <tr><td><b>Olympiad math</b><br><span class="muted">IMO 2025 (35/42 = gold)</span></td><td class="num ai">83</td><td class="num human">78</td><td>DeepMind &amp; OpenAI both at gold cutoff. <a href="https://garymarcus.substack.com/p/deepmind-and-openai-achieve-imo-gold">IMO 2025 coverage</a>.</td></tr>
+      <tr><td><b>Speed per research task</b><br><span class="muted">inverted: time-to-attempt</span></td><td class="num ai">98</td><td class="num human">15</td><td>FrontierScience: PhDs took 3-5h per Research problem; AI returns attempts in seconds. <a href="https://arxiv.org/abs/2601.21165">arXiv:2601.21165</a>.</td></tr>
+      <tr><td><b>Scale &amp; parallelism</b><br><span class="muted">concurrent attempts</span></td><td class="num ai">97</td><td class="num human">8</td><td>AlphaFold predicted 200M+ structures. <a href="https://deepmind.google/blog/alphafold-five-years-of-impact/">DeepMind</a>.</td></tr>
+      <tr><td><b>Olympiad-style closed-form science</b><br><span class="muted">FrontierScience-Olympiad</span></td><td class="num ai">77</td><td class="num human">72</td><td>GPT-5.2 verbatim from the FrontierScience paper. Human reference is the medalist-author standard.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="panel human">
+  <h3>Human-leading capabilities</h3>
+  <table class="tbl">
+    <thead><tr><th>Capability</th><th>AI</th><th>Human</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td><b>Open-ended research reasoning</b><br><span class="muted">FrontierScience-Research, ≥7/10 rubric</span></td><td class="num ai">25</td><td class="num human">85</td><td>GPT-5.2 quoted verbatim. Human reference: by construction, PhD authors must clear 7/10 themselves.</td></tr>
+      <tr><td><b>Frontier mathematics</b><br><span class="muted">FrontierMath Tier 4</span></td><td class="num ai">6</td><td class="num human">90</td><td>o4-mini best at 6.3%; most models 0%. Human mathematicians solve in days. <a href="https://arxiv.org/abs/2411.04872">Epoch AI</a>.</td></tr>
+      <tr><td><b>Humanity&apos;s Last Exam</b></td><td class="num ai">45</td><td class="num human">90</td><td>Gemini 3.1 Pro Preview at 44.7% (May 2026). Expert humans ≈90% in their domains. <a href="https://agi.safe.ai/">CAIS HLE</a>.</td></tr>
+      <tr><td><b>Novel adaptive reasoning</b><br><span class="muted">ARC-AGI-3 interactive</span></td><td class="num ai">1</td><td class="num human">100</td><td>All frontier models &lt;1% on the March 2026 benchmark. <a href="https://arcprize.org/">arcprize.org</a>.</td></tr>
+      <tr><td><b>Hard diagnostic radiology</b><br><span class="muted">Radiology Last Exam (RadLE)</span></td><td class="num ai">30</td><td class="num human">83</td><td>Board-certified radiologists 83% vs GPT-5 30%. <a href="https://arxiv.org/pdf/2509.25559">RadLE preprint</a>.</td></tr>
+      <tr><td><b>Niche subfield expertise</b></td><td class="num ai">22</td><td class="num human">90</td><td>FrontierScience paper&apos;s top failure mode: "niche concept failure" &mdash; model substitutes a related-but-wrong concept.</td></tr>
+      <tr><td><b>Novel hypothesis / ideation</b></td><td class="num ai">15</td><td class="num human">92</td><td>Sakana AI Scientist v2 got one workshop paper through, but 42% of experiments failed. <a href="https://arxiv.org/abs/2502.14297">Evaluation paper</a>.</td></tr>
+      <tr><td><b>Wet-lab / physical experiment</b></td><td class="num ai">0</td><td class="num human">100</td><td>FrontierScience §4 limitation: text-only eval; cannot interact with reality. Holds for every benchmark above.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ 5. MIND-BLOWING ============ -->
+<h2>5 &middot; The mind-blowing facts worth quoting</h2>
+<div class="twocol">
+  <div class="panel ai">
+    <h3>AI wins, in plain English</h3>
+    <div class="stat ai">93% &gt; 65%</div>
+    <p>GPT-5.2 Pro <b>beats PhD experts with internet access</b> on GPQA Diamond. The expert-google baseline was the original gold standard for "general scientific intelligence." It is now solved.</p>
+
+    <div class="stat ai" style="margin-top:18px">200M proteins</div>
+    <p>AlphaFold predicted structures that would have taken <b>hundreds of millions of years</b> in the lab. <b>3M+ researchers</b> in <b>190+ countries</b> use the database. <b>2024 Nobel in Chemistry</b>.</p>
+
+    <div class="stat ai" style="margin-top:18px">2727 Elo</div>
+    <p>OpenAI o3 on Codeforces &mdash; that&apos;s <b>top 0.1%</b> among ~600k competitive programmers. The same model family scored <b>IMO gold (35/42)</b> in 2025.</p>
+  </div>
+
+  <div class="panel human">
+    <h3>Humans still own this</h3>
+    <div class="stat human">&lt;1% &harr; 100%</div>
+    <p>On <b>ARC-AGI-3</b> (March 2026), every frontier model is below 1%. Humans get 100%. When the benchmark removes memorized patterns and demands novel reasoning, the gap is total.</p>
+
+    <div class="stat human" style="margin-top:18px">6% on Tier 4</div>
+    <p>FrontierMath&apos;s research-level problems take human mathematicians <b>days</b>. The best AI solves <b>6.3%</b>. Most frontier models score zero. Mathematics-as-research is not solved.</p>
+
+    <div class="stat human" style="margin-top:18px">323&times;</div>
+    <p>Emergency intracranial hemorrhage detection: radiologists&apos; diagnostic odds ratio is <b>323&times; higher</b> than AI&apos;s, with 4 false positives vs AI&apos;s 293. AI is not yet the doctor.</p>
+  </div>
+
+  <div class="panel warn" style="margin-top:16px">
+    <h3>The fact that should change every roadmap</h3>
+    <div class="stat warn">~4.3 months</div>
+    <p>METR&apos;s <i>task-completion time horizon</i> tracks the longest task an AI can do reliably, measured by how long it takes a human. <b>That horizon is doubling every 4.3 months</b> (post-2023, updated Jan&nbsp;2026). On the slide&apos;s shock strip, Humanity&apos;s Last Exam went from <b>8% (Jan 2025) to 44.7% (May 2026)</b>. Whatever AI cannot do today is on a four-month clock.</p>
+  </div>
+</div>
+
+<!-- ============ 6. METHODOLOGY ============ -->
+<h2>6 &middot; Methodology and honest caveats</h2>
+
+<div class="panel">
+  <h3>How AI scores were chosen</h3>
+  <ul>
+    <li><b>Top frontier model</b> for each benchmark as of May 2026 (GPT-5.2 Pro, Gemini 3.1 Pro Preview, Claude Mythos, OpenAI o3, etc.). We use the public leaderboard&apos;s headline number, not internal results.</li>
+    <li><b>No averaging across models</b>: this is the "ceiling," what a stakeholder cares about.</li>
+    <li><b>Verbatim where possible</b>: GPQA 93%, HLE 44.7%, FrontierScience 77/25, IMO 35/42, SWE-bench 93.9%. No estimation from charts.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h3>How human scores were chosen &mdash; and what we&apos;re hand-waving</h3>
+  <ul>
+    <li><b>Published expert baselines</b> where they exist: GPQA expert ≈65%, HLE expert ≈90%, RadLE radiologists 83%.</li>
+    <li><b>By construction</b> on FrontierScience-Research: the rubric is calibrated so a competent PhD scores ≥7/10. We encode that as ~85.</li>
+    <li><b>Structural attributes</b> &mdash; speed, scale, cost, parallelism &mdash; are normalized 0&ndash;100 from order-of-magnitude estimates. A 3-hour human attempt vs a 10-second AI attempt is ~1000&times;; that becomes "AI 98 vs Human 15," not "AI 1000 vs Human 1." The bar is meant to compare visually, not be divided.</li>
+    <li><b>The FrontierScience paper itself</b> notes (§4) that <b>no formal human baseline was run</b>. Most public AI benchmarks share this gap. We&apos;re upfront about it: the human scores in this slide are <b>defensible best-evidence estimates</b>, not measured experiments.</li>
+  </ul>
+</div>
+
+<div class="panel">
+  <h3>What this slide does NOT claim</h3>
+  <ul>
+    <li><b>It is not a forecast.</b> The 4.3-month doubling is a measured past trend, not a promised future.</li>
+    <li><b>It is not a productivity claim.</b> A 94% on SWE-bench Verified ≠ "AI replaces engineers." Real codebases are much harder; SWE-Bench Pro caps top models at ~23%.</li>
+    <li><b>It is not a benchmark-by-benchmark teardown.</b> Each row collapses thousands of hours of evaluation work into one number. The companion citations are the audit trail.</li>
+    <li><b>"AI wins on speed" is not the same as "AI wins on quality."</b> The same model that returns an answer in 10 seconds is often the model that gets a niche concept wrong.</li>
+  </ul>
+</div>
+
+<!-- ============ 7. WHO IT'S FOR ============ -->
+<h2>7 &middot; Why this is useful (and to whom)</h2>
+
+<div class="twocol">
+  <div class="panel">
+    <h3>For execs &amp; leadership</h3>
+    <ul>
+      <li>One slide answers: where can we deploy AI today vs where do we still need humans?</li>
+      <li>Forces the right framing: <b>not "AI vs humans"</b> but <b>"which tasks have crossed over."</b></li>
+      <li>The shock strip is a soundbite library &mdash; quote one of those numbers in any AI conversation for the next quarter.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h3>For researchers &amp; technical folks</h3>
+    <ul>
+      <li>Calibrates intuition. If you only read benchmarks in your field, you have a distorted view.</li>
+      <li>Identifies the still-hard problems &mdash; ARC-AGI-3, FrontierMath Tier 4, FrontierScience-Research, RadLE &mdash; as the places where moving the number actually means something.</li>
+      <li>Cited &amp; reproducible: every number traces back to a public benchmark.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h3>For product &amp; strategy</h3>
+    <ul>
+      <li>Maps capabilities to product surface: AI is ready for "closed-form" workflows (knowledge retrieval, code completion, structured science); not yet ready for "open-ended" workflows (novel hypothesis, multi-step research, physical interaction).</li>
+      <li>The 4.3-month doubling is the planning horizon: anything you defer "until AI is good enough" likely arrives in 3 product cycles.</li>
+    </ul>
+  </div>
+  <div class="panel">
+    <h3>For skeptics &amp; AI-doomers alike</h3>
+    <ul>
+      <li>Two truths held together: AI <b>has</b> crossed superhuman on multiple expert benchmarks; AI <b>cannot</b> yet do the open-ended work that defines research.</li>
+      <li>No hype, no doom &mdash; just where the bars currently sit and where they&apos;re moving.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ 8. WHAT TO READ ============ -->
+<h2>8 &middot; Going deeper</h2>
+<div class="panel">
+  <ul>
+    <li><a href="https://arxiv.org/abs/2601.21165">FrontierScience paper (arXiv)</a> &mdash; the source paper this slide is grounded in.</li>
+    <li><a href="index.html">Two faces of FrontierScience &mdash; data story</a> &mdash; the original 9-section deep dive.</li>
+    <li><a href="https://metr.org/time-horizons/">METR Time Horizons</a> &mdash; the 4.3-month doubling argument.</li>
+    <li><a href="https://agi.safe.ai/">Humanity&apos;s Last Exam</a> &mdash; the hardest known AI test.</li>
+    <li><a href="https://epoch.ai/frontiermath">FrontierMath</a> &mdash; the math research benchmark.</li>
+    <li><a href="https://arcprize.org/">ARC Prize</a> &mdash; the novel-reasoning benchmark.</li>
+    <li><a href="https://deepmind.google/blog/alphafold-five-years-of-impact/">AlphaFold: Five Years of Impact</a> &mdash; the AI-for-science exemplar.</li>
+  </ul>
+</div>
+
+<hr class="div">
+
+<p class="footnote">All AI scores are from public benchmark leaderboards or papers, current as of May 2026. Human-expert scores are either published expert baselines or order-of-magnitude normalizations on a 0&ndash;100 scale (clearly disclosed above). This page is an audit trail for the visualization; if you spot a number you can&apos;t reconcile against the cited source, that&apos;s a bug &mdash; not a feature.</p>
+
+<div class="nav">
+  <a href="frontier_ai_vs_humans.html">&larr; Back to the slide</a>
+  <a class="alt" href="index.html">Full FrontierScience data story</a>
+</div>
+
+</div>
+</body>
+</html>

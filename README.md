@@ -1,8 +1,12 @@
 # FrontierScience — a data story
 
-An intuitive data visualization plus narrative for OpenAI's FrontierScience
-evaluation (paper: [arXiv 2601.21165](https://arxiv.org/abs/2601.21165);
-dataset: [openai/frontierscience on HF](https://huggingface.co/datasets/openai/frontierscience)).
+Two views on OpenAI's FrontierScience evaluation (paper: [arXiv 2601.21165](https://arxiv.org/abs/2601.21165);
+dataset: [openai/frontierscience on HF](https://huggingface.co/datasets/openai/frontierscience)):
+
+1. **A 9-section narrative deep dive** into the paper itself.
+2. **A single-slide stakeholder view** placing FrontierScience inside the broader
+   AI-vs-human-researcher landscape (GPQA, HLE, FrontierMath, SWE-bench, IMO,
+   Codeforces, ARC-AGI, RadLE, METR, AlphaFold).
 
 ## What's the story?
 
@@ -18,13 +22,17 @@ different questions; they're applying different graders:
   containing 7-18 sub-criteria per problem. Median answer length: 2,248
   characters.
 
-The visualization walks through this in 7 sections, all driven by the
-released 160-problem gold set.
+That's the paper. The stakeholder slide goes one level up: FrontierScience-Research
+isn't an isolated 25% — it's part of a pattern. AI has crossed superhuman on
+closed-form benchmarks (GPQA 93%, IMO gold, Codeforces 2727 Elo, SWE-bench 94%)
+while still trailing humans on open-ended research work
+(FrontierMath Tier 4: 6%, HLE: 45% vs human 90%, ARC-AGI-3: <1% vs 100%).
 
 ## How to view
 
-Just open `index.html` in any modern browser. The dataset is embedded inline
-(no network needed at view-time, no build step).
+Open `index.html` in any modern browser. The dataset is embedded inline
+(no network needed at view-time, no build step). The top nav links to the
+two companion pages.
 
 ```
 # Windows
@@ -45,13 +53,26 @@ python -c "import urllib.request as u; base='https://huggingface.co/datasets/ope
 
 ## What's in this folder
 
-- `index.html` — the deliverable; self-contained, ~600&nbsp;kB
-- `data/olympiad_test.jsonl` — 100 Olympiad problems
-- `data/research_test.jsonl` — 60 Research problems
-- `data.json` — the merged + rubric-parsed payload that gets embedded
-- `Task.md` — the original task spec
+| File | Purpose |
+|---|---|
+| `index.html` | The original 9-section data story; self-contained, ~600 kB. Top nav links to the slide and about page. |
+| `frontier_ai_vs_humans.html` | Single-slide, presentation-ready view of where AI stands vs human researchers across 14 capabilities. Diverging bar chart + shock-strip stats + nuance cards. Fits one screen, no scrolling. |
+| `frontier_ai_vs_humans_about.html` | Companion explainer for the slide: design rationale, full data table with sources for every bar, methodology, honest caveats, who it's useful for. |
+| `data/olympiad_test.jsonl` | 100 Olympiad problems (raw HF dataset). |
+| `data/research_test.jsonl` | 60 Research problems (raw HF dataset). |
+| `data.json` | Merged + rubric-parsed payload that gets embedded into `index.html`. |
+| `paper.txt` | Extracted text of the FrontierScience paper for reference. |
+| `Task.md` | Original task spec. |
+
+## Navigation between pages
+
+All three pages cross-link via the sticky top nav in `index.html` and via
+footer links in the two slide pages. You can land on any of them and
+navigate to the others without re-opening files.
 
 ## Methodology notes
+
+**On `index.html` (the data story)**
 
 - All charts on the page that derive from the **dataset** (subject mix,
   answer-length distribution, rubric anatomy) are computed live from the
@@ -61,3 +82,31 @@ python -c "import urllib.request as u; base='https://huggingface.co/datasets/ope
   text. Bars whose heights I could only estimate by eyeballing Figure 6 are
   intentionally omitted rather than fabricated.
 - Sources for every claim are linked at the bottom of `index.html`.
+
+**On `frontier_ai_vs_humans.html` (the stakeholder slide)**
+
+- **AI scores** are taken from the top frontier model on each benchmark as
+  of May 2026, quoted verbatim from public leaderboards or papers
+  (GPT-5.2 Pro on GPQA, Gemini 3.1 Pro on HLE, Claude Mythos on SWE-bench,
+  DeepMind/OpenAI on IMO 2025, OpenAI o3 on Codeforces, etc.).
+- **Human scores** are either (a) published expert baselines where they
+  exist (GPQA expert ≈65%, HLE expert ≈90%, RadLE radiologists 83%) or
+  (b) order-of-magnitude normalizations on a 0–100 scale for structural
+  attributes like speed, scale, and cost. The
+  FrontierScience paper itself notes (§4) that no formal human baseline
+  was run; we're upfront about that in the about page.
+- Every bar's source is cited in the tooltip and in the full data table on
+  `frontier_ai_vs_humans_about.html`.
+
+## Key data sources for the stakeholder slide
+
+- [FrontierScience paper (arXiv)](https://arxiv.org/abs/2601.21165)
+- [Humanity's Last Exam (CAIS)](https://agi.safe.ai/) — 8% → 44.7% in 16 months
+- [FrontierMath (Epoch AI)](https://epoch.ai/frontiermath) — Tier 4 at 6.3% best
+- [SWE-bench Verified](https://www.swebench.com/verified.html)
+- [METR Time Horizons](https://metr.org/time-horizons/) — 4.3-month doubling
+- [ARC Prize](https://arcprize.org/) — ARC-AGI-3 <1% AI / 100% human
+- [AlphaFold: Five Years of Impact (DeepMind)](https://deepmind.google/blog/alphafold-five-years-of-impact/)
+- [Codeforces o3 announcement](https://codeforces.com/blog/entry/133874)
+- [Radiology Last Exam (RadLE) preprint](https://arxiv.org/pdf/2509.25559)
+- [Sakana AI Scientist evaluation](https://arxiv.org/abs/2502.14297)
