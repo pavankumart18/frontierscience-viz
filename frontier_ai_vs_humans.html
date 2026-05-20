@@ -23,7 +23,7 @@
   a{color:var(--ai);text-decoration:none}
   .slide{
     width:100vw;height:100vh;display:grid;
-    grid-template-rows:auto auto 1fr auto;
+    grid-template-rows:auto 1fr auto;
     padding:18px 26px 12px;gap:11px;
   }
 
@@ -66,7 +66,7 @@
   .shock .desc b{color:var(--ink)}
 
   /* ===== Main ===== */
-  main{display:grid;grid-template-columns:1fr 270px;gap:14px;min-height:0}
+  main{display:grid;grid-template-columns:1fr;gap:14px;min-height:0}
   .chart-wrap{
     background:var(--panel);border:1px solid var(--line);border-radius:12px;
     padding:10px 16px 8px;display:flex;flex-direction:column;min-height:0;overflow:hidden
@@ -150,30 +150,6 @@
   </div>
 </header>
 
-<!-- SHOCK STRIP -->
-<div class="shock">
-  <div class="s ai">
-    <div class="lab">Knowledge has saturated</div>
-    <div class="big">93%</div>
-    <p class="desc">GPT-5.2 Pro on <b>GPQA Diamond</b>. PhD experts <i>with internet access</i> score ~65%. AI is +28 pts.</p>
-  </div>
-  <div class="s ai">
-    <div class="lab">AlphaFold &mdash; the proof of concept</div>
-    <div class="big">200M+</div>
-    <p class="desc">Protein structures predicted. The lab equivalent would take <b>hundreds of millions of years</b>. <b>2024 Nobel</b>.</p>
-  </div>
-  <div class="s warn">
-    <div class="lab">The headline whiplash</div>
-    <div class="big">8% &rarr; 44.7%</div>
-    <p class="desc">Top AI on <b>Humanity&apos;s Last Exam</b> in <b>16 months</b>. Expert humans still ~90%. Trajectory is the story.</p>
-  </div>
-  <div class="s human">
-    <div class="lab">Where AI still face-plants</div>
-    <div class="big">&lt;1%</div>
-    <p class="desc">Frontier models on <b>ARC-AGI-3</b> (novel reasoning). Humans: <b>100%</b>. Same on <b>FrontierMath Tier 4</b>: ~6%.</p>
-  </div>
-</div>
-
 <!-- MAIN -->
 <main>
   <div class="chart-wrap">
@@ -189,28 +165,6 @@
     <svg id="bars" viewBox="0 0 980 460" preserveAspectRatio="xMidYMid meet"></svg>
   </div>
 
-  <aside>
-    <div class="card ai">
-      <div class="lab">Competitive coding</div>
-      <div class="big">Top 0.1%</div>
-      <p class="desc">OpenAI o3 hit <b>2727 Elo</b> on Codeforces (top 50-ish among ~600k humans). Claude Mythos: <b>93.9%</b> on SWE-bench Verified.</p>
-    </div>
-    <div class="card ai">
-      <div class="lab">Olympiad math</div>
-      <div class="big">IMO Gold</div>
-      <p class="desc">Both <b>DeepMind</b> &amp; <b>OpenAI</b> scored <b>35/42</b> at IMO 2025 &mdash; the gold cutoff. Top 11% of humans there.</p>
-    </div>
-    <div class="card human">
-      <div class="lab">Hard diagnostic medicine</div>
-      <div class="big">83% vs 30%</div>
-      <p class="desc">On the <b>Radiology Last Exam</b>, board-certified radiologists score 83%; GPT-5 manages 30% &mdash; AI hallucinates rare cases.</p>
-    </div>
-    <div class="card warn">
-      <div class="lab">The agent time-horizon</div>
-      <div class="big">~4 min</div>
-      <p class="desc">METR (2026): AI is near-100% on tasks humans do in &lt;4 min, &lt;10% past <b>4 hours</b>. Doubling every 4.3 months.</p>
-    </div>
-  </aside>
 </main>
 
 <!-- FOOTER -->
