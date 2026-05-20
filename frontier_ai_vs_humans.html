@@ -11,10 +11,14 @@
     --ai:#5ad1c4;
     --ai-soft:rgba(90,209,196,0.14);
     --ai-edge:rgba(90,209,196,0.45);
-    --human:#f0a868;
-    --human-soft:rgba(240,168,104,0.14);
-    --human-edge:rgba(240,168,104,0.45);
+    --human:#a8b3c7;
+    --human-soft:rgba(148,163,184,0.34);
+    --human-edge:rgba(148,163,184,0.72);
+    --human-text:rgba(203,213,225,0.95);
     --warn:#ff7a59;
+    --ai-behind:#cf6679;
+    --ai-behind-edge:rgba(207,102,121,0.55);
+    --ai-ahead-edge:rgba(90,209,196,0.60);
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--bg);color:var(--ink);
@@ -73,11 +77,11 @@
   }
   .chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
   .chart-title{font-size:12.5px;font-weight:600;color:var(--ink);letter-spacing:.02em}
-  .axis-labels{display:grid;grid-template-columns:1fr 320px 1fr;align-items:center;
-    font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.15em;margin-bottom:2px}
-  .axis-labels .L{text-align:right;color:var(--ai);font-weight:700}
-  .axis-labels .R{text-align:left;color:var(--human);font-weight:700}
-  .axis-labels .C{text-align:center;font-size:9.5px;color:var(--mute);font-weight:500;letter-spacing:.12em}
+  .axis-labels{display:grid;grid-template-columns:260px 1fr;align-items:center;
+    font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.15em;
+    margin-bottom:4px;padding:0 18px}
+  .axis-labels .L{text-align:left;font-weight:600}
+  .axis-labels .R{text-align:left;font-weight:500;letter-spacing:.05em;text-transform:none;font-size:10.5px}
   svg#bars{flex:1;min-height:0;width:100%}
   .bar{transition:filter .15s}
   .bar:hover{filter:brightness(1.25);cursor:pointer}
@@ -161,9 +165,12 @@
       <div style="font-size:10px;color:var(--mute)">hover any bar for source &amp; insight</div>
     </div>
     <div class="axis-labels">
-      <div class="L">&larr; AI advantage</div>
-      <div class="C">capability / research task</div>
-      <div class="R">human advantage &rarr;</div>
+      <div class="L">capability / research task</div>
+      <div class="R">score 0 &mdash; 100 &nbsp;&middot;&nbsp;
+        <span style="color:var(--human-text);font-weight:600">human (base)</span> &middot;
+        <span style="color:var(--ai);font-weight:600">AI ahead</span> &middot;
+        <span style="color:var(--ai-behind);font-weight:600">AI behind</span>
+      </div>
     </div>
     <svg id="bars" viewBox="0 0 980 460" preserveAspectRatio="xMidYMid meet"></svg>
   </div>
@@ -173,9 +180,10 @@
 <!-- FOOTER -->
 <footer>
   <div class="legend">
-    <span><span class="sw" style="background:var(--ai)"></span>AI (frontier models, 2025-26)</span>
-    <span><span class="sw" style="background:var(--human)"></span>Human expert researchers</span>
-    <span style="color:var(--mute)">Bar = score 0&ndash;100 on each side of center.</span>
+    <span><span class="sw" style="background:var(--human-soft);border:1px solid var(--human-edge)"></span>Human expert (base bar 0&rarr;score)</span>
+    <span><span class="sw" style="background:var(--ai)"></span>AI ahead &mdash; gap past human&apos;s end</span>
+    <span><span class="sw" style="background:var(--ai-behind)"></span>AI behind &mdash; gap inside human&apos;s end</span>
+    <span style="color:var(--mute)">Rows sorted by AI score</span>
   </div>
   <div class="src">
     Sources: OpenAI FrontierScience (<a href="https://arxiv.org/abs/2601.21165">arXiv</a>) &middot;
@@ -314,16 +322,25 @@
   // ===== Layout =====
   const svg = document.getElementById('bars');
   const W = 980, H = 460;
-  const PAD = { l: 18, r: 18, t: 10, b: 18 };
-  const LABEL_W = 290;
-  const innerW = W - PAD.l - PAD.r;
-  const sideW = (innerW - LABEL_W) / 2;
-  const center = PAD.l + sideW + LABEL_W / 2;
-  const aiZoneEnd = PAD.l + sideW;
-  const humanZoneStart = aiZoneEnd + LABEL_W;
+  const PAD = { l: 18, r: 14, t: 10, b: 22 };
+  const LABEL_W = 260;
+  const VALUE_PAD = 42;
+  const barZoneX = PAD.l + LABEL_W;
+  const barZoneW = W - PAD.l - LABEL_W - PAD.r - VALUE_PAD;
   const rowH = (H - PAD.t - PAD.b) / data.length;
-  const barH = Math.max(8, rowH * 0.62);
-  const scale = (v) => (v / 100) * sideW;
+  const humanH = Math.max(10, rowH * 0.68);
+  const aiH = Math.max(5, rowH * 0.28);
+  const scale = (v) => (v / 100) * barZoneW;
+
+  // Colors — human base is a cool slate-blue (neutral, recedes); AI bars
+  // (teal = ahead, deep rose = behind) live in distinct hue families.
+  const COL_HUMAN_FILL    = 'rgba(148,163,184,0.34)';
+  const COL_HUMAN_STROKE  = 'rgba(148,163,184,0.72)';
+  const COL_HUMAN_TEXT    = 'rgba(203,213,225,0.95)';
+  const COL_AI_AHEAD      = '#5ad1c4';
+  const COL_AI_AHEAD_STK  = 'rgba(90,209,196,0.60)';
+  const COL_AI_BEHIND     = '#cf6679';
+  const COL_AI_BEHIND_STK = 'rgba(207,102,121,0.55)';
 
   const NS = 'http://www.w3.org/2000/svg';
   const mk = (tag, attrs={}, text) => {
@@ -333,30 +350,34 @@
     return el;
   };
 
-  // Soft band behind AI vs human rows
-  const aiRows = data.filter(d=>d.side==='ai').length;
+  // Sort by AI score, highest first
+  data.sort((a, b) => b.ai - a.ai);
+
+  // Faint band separating AI-ahead rows from AI-behind rows (split = first row where AI < human)
+  const splitIdx = (() => {
+    const i = data.findIndex(d => d.ai < d.human);
+    return i === -1 ? data.length : i;
+  })();
   svg.appendChild(mk('rect', {
     x: PAD.l, y: PAD.t,
-    width: innerW, height: aiRows * rowH,
-    fill:'rgba(90,209,196,0.035)', rx:6
+    width: W - PAD.l - PAD.r, height: splitIdx * rowH,
+    fill:'rgba(90,209,196,0.025)', rx:6
   }));
   svg.appendChild(mk('rect', {
-    x: PAD.l, y: PAD.t + aiRows * rowH,
-    width: innerW, height: (data.length - aiRows) * rowH,
-    fill:'rgba(240,168,104,0.035)', rx:6
+    x: PAD.l, y: PAD.t + splitIdx * rowH,
+    width: W - PAD.l - PAD.r, height: (data.length - splitIdx) * rowH,
+    fill:'rgba(207,102,121,0.022)', rx:6
   }));
 
-  // Gridlines + tick labels
+  // Gridlines + tick labels (single bar zone)
+  // 0 baseline (slightly stronger)
+  svg.appendChild(mk('line', {x1:barZoneX,y1:PAD.t,x2:barZoneX,y2:H-PAD.b,class:'center-line'}));
+  svg.appendChild(mk('text', {x:barZoneX,y:H-PAD.b+10,'text-anchor':'middle',class:'axis-tick'}, '0'));
   [25,50,75,100].forEach(v => {
-    const xL = aiZoneEnd - scale(v);
-    svg.appendChild(mk('line', {x1:xL,y1:PAD.t,x2:xL,y2:H-PAD.b,class:'axis-line'}));
-    svg.appendChild(mk('text', {x:xL,y:H-PAD.b+10,'text-anchor':'middle',class:'axis-tick'}, v));
-    const xR = humanZoneStart + scale(v);
-    svg.appendChild(mk('line', {x1:xR,y1:PAD.t,x2:xR,y2:H-PAD.b,class:'axis-line'}));
-    svg.appendChild(mk('text', {x:xR,y:H-PAD.b+10,'text-anchor':'middle',class:'axis-tick'}, v));
+    const x = barZoneX + scale(v);
+    svg.appendChild(mk('line', {x1:x,y1:PAD.t,x2:x,y2:H-PAD.b,class:'axis-line'}));
+    svg.appendChild(mk('text', {x:x,y:H-PAD.b+10,'text-anchor':'middle',class:'axis-tick'}, v));
   });
-  svg.appendChild(mk('line', {x1:aiZoneEnd,y1:PAD.t,x2:aiZoneEnd,y2:H-PAD.b,class:'center-line'}));
-  svg.appendChild(mk('line', {x1:humanZoneStart,y1:PAD.t,x2:humanZoneStart,y2:H-PAD.b,class:'center-line'}));
 
   // Tooltip
   const tip = document.getElementById('tip');
@@ -385,59 +406,76 @@
   };
 
   data.forEach((d, i) => {
-    const y = PAD.t + i * rowH + (rowH - barH) / 2;
     const cy = PAD.t + i * rowH + rowH / 2;
-
-    // AI bar (LEFT)
+    const aiAhead = d.ai >= d.human;
+    const aiColor  = aiAhead ? COL_AI_AHEAD     : COL_AI_BEHIND;
+    const aiStroke = aiAhead ? COL_AI_AHEAD_STK : COL_AI_BEHIND_STK;
+    const humanLen = scale(d.human);
     const aiLen = scale(d.ai);
-    const aiX = aiZoneEnd - aiLen;
-    const aiBar = mk('rect', {
-      x: aiX, y, width: aiLen, height: barH,
-      fill:'var(--ai-soft)', stroke:'var(--ai-edge)', 'stroke-width':1, rx:3, class:'bar'
-    });
-    wire(aiBar, d);
-    svg.appendChild(aiBar);
 
-    const aiFill = mk('rect', {
-      x: aiX, y: y + barH*0.18, width: aiLen, height: barH*0.64,
-      fill:'var(--ai)', opacity: d.ai/100 * 0.85 + 0.15, rx:2, class:'bar'
-    });
-    wire(aiFill, d);
-    svg.appendChild(aiFill);
-
-    svg.appendChild(mk('text', {
-      x: aiX - 6, y: cy + 3.5, 'text-anchor':'end',
-      fill: d.side==='ai' ? 'var(--ai)' : 'var(--mute)', class:'bar-val'
-    }, d.ai));
-
-    // Human bar (RIGHT)
-    const hLen = scale(d.human);
-    const hBar = mk('rect', {
-      x: humanZoneStart, y, width: hLen, height: barH,
-      fill:'var(--human-soft)', stroke:'var(--human-edge)', 'stroke-width':1, rx:3, class:'bar'
-    });
-    wire(hBar, d);
-    svg.appendChild(hBar);
-
-    const hFill = mk('rect', {
-      x: humanZoneStart, y: y + barH*0.18, width: hLen, height: barH*0.64,
-      fill:'var(--human)', opacity: d.human/100 * 0.85 + 0.15, rx:2, class:'bar'
-    });
-    wire(hFill, d);
-    svg.appendChild(hFill);
-
-    svg.appendChild(mk('text', {
-      x: humanZoneStart + hLen + 6, y: cy + 3.5, 'text-anchor':'start',
-      fill: d.side==='human' ? 'var(--human)' : 'var(--mute)', class:'bar-val'
-    }, d.human));
-
-    // Center label (single line, no on-chart subtitle)
+    // ── Label on the LEFT ──
     const labelEl = mk('text', {
-      x: center, y: cy + 4, 'text-anchor':'middle', class:'bar-label',
-      fill: d.side === 'ai' ? '#cfeee9' : '#f3d9b6'
+      x: PAD.l + LABEL_W - 12, y: cy + 4, 'text-anchor':'end',
+      class:'bar-label', fill:'#e8edf6'
     }, d.label);
     wire(labelEl, d);
     svg.appendChild(labelEl);
+
+    // ── Human bar: ALWAYS 0 → human, muted amber, full row height ──
+    const humanBarY = cy - humanH / 2;
+    const humanBar = mk('rect', {
+      x: barZoneX, y: humanBarY, width: humanLen, height: humanH,
+      fill: COL_HUMAN_FILL, stroke: COL_HUMAN_STROKE, 'stroke-width': 1, rx: 3,
+      class:'bar'
+    });
+    wire(humanBar, d);
+    svg.appendChild(humanBar);
+
+    // ── AI bar: a "gap bar" at the right end of human bar ──
+    //   AI ahead  → GREEN extension going further right of human's end (human → AI)
+    //   AI behind → RED gap at the right end of human bar going backwards (AI → human)
+    const aiBarY = cy - aiH / 2;
+    if (aiAhead) {
+      const extX = barZoneX + humanLen;
+      const extW = Math.max(0, aiLen - humanLen);
+      if (extW > 0) {
+        const aiBar = mk('rect', {
+          x: extX, y: aiBarY, width: extW, height: aiH,
+          fill: aiColor, stroke: aiStroke, 'stroke-width': 0.6, rx: 2, class:'bar'
+        });
+        wire(aiBar, d);
+        svg.appendChild(aiBar);
+      }
+    } else {
+      const gapX = barZoneX + aiLen;
+      const gapW = Math.max(0, humanLen - aiLen);
+      if (gapW > 0) {
+        const aiBar = mk('rect', {
+          x: gapX, y: aiBarY, width: gapW, height: aiH,
+          fill: aiColor, stroke: aiStroke, 'stroke-width': 0.6, rx: 2, class:'bar'
+        });
+        wire(aiBar, d);
+        svg.appendChild(aiBar);
+      }
+    }
+
+    // ── Value labels ──
+    // Human value:
+    //   AI ahead  → INSIDE the human bar at its right edge (otherwise it'd sit on the AI extension)
+    //   AI behind → OUTSIDE just past the human bar (clear space, doesn't fight the red gap)
+    svg.appendChild(mk('text', {
+      x: aiAhead ? barZoneX + humanLen - 6 : barZoneX + humanLen + 6,
+      y: cy + 4,
+      'text-anchor': aiAhead ? 'end' : 'start',
+      fill: COL_HUMAN_TEXT, class:'bar-val'
+    }, d.human));
+    // AI value sits on the same row baseline as the human value, just past the AI bar tip
+    svg.appendChild(mk('text', {
+      x: aiAhead ? barZoneX + aiLen + 4 : barZoneX + aiLen - 4,
+      y: cy + 4,
+      'text-anchor': aiAhead ? 'start' : 'end',
+      fill: aiColor, class:'bar-val'
+    }, d.ai));
   });
 })();
 </script>
