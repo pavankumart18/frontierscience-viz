@@ -80,9 +80,9 @@
   .axis-labels .C{text-align:center;font-size:9.5px;color:var(--mute);font-weight:500;letter-spacing:.12em}
   svg#bars{flex:1;min-height:0;width:100%}
   .bar{transition:filter .15s}
-  .bar:hover{filter:brightness(1.25);cursor:crosshair}
-  .bar-label{font-size:11px;fill:var(--ink);font-weight:600;letter-spacing:.01em}
-  .bar-sub{font-size:9.5px;fill:var(--mute);letter-spacing:.05em;text-transform:uppercase}
+  .bar:hover{filter:brightness(1.25);cursor:pointer}
+  .bar-label{font-size:11.5px;fill:var(--ink);font-weight:600;letter-spacing:.01em;cursor:pointer}
+  .bar-label:hover{fill:var(--ai)}
   .bar-val{font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums}
   .axis-tick{font-size:9px;fill:var(--mute);font-variant-numeric:tabular-nums}
   .axis-line{stroke:var(--line);stroke-dasharray:2 3}
@@ -115,14 +115,17 @@
   footer a{color:var(--mute);text-decoration:underline;text-decoration-color:var(--line)}
 
   .tip{position:fixed;pointer-events:none;background:#0a0e16;border:1px solid var(--line);
-    border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--ink);max-width:330px;
+    border-radius:8px;padding:11px 13px;font-size:11.5px;color:var(--ink);max-width:340px;
     z-index:99;display:none;box-shadow:0 8px 28px rgba(0,0,0,0.6);line-height:1.4}
-  .tip .tt-row{display:flex;justify-content:space-between;gap:14px;margin-top:3px}
+  .tip .tt-sub{color:var(--mute);font-size:10.5px;margin-top:3px;letter-spacing:.02em}
+  .tip .tt-row{display:flex;justify-content:space-between;gap:14px;margin-top:4px}
   .tip .tt-ai{color:var(--ai);font-weight:700}
   .tip .tt-h{color:var(--human);font-weight:700}
-  .tip .tt-insight{margin-top:6px;color:#cdd5e3;font-style:italic;font-size:11px;
+  .tip .tt-insight{margin-top:7px;color:#cdd5e3;font-style:italic;font-size:11px;
     padding-top:6px;border-top:1px solid var(--line)}
-  .tip .tt-src{margin-top:5px;color:var(--mute);font-size:10px;letter-spacing:.02em}
+  .tip .tt-src{margin-top:7px;color:var(--ai);font-size:10.5px;letter-spacing:.02em;
+    display:flex;align-items:center;gap:4px}
+  .tip .tt-src .arrow{opacity:0.7}
 
   @media (max-height:720px){
     h1{font-size:24px} .takeaway{font-size:11.5px;padding:9px 12px}
@@ -201,96 +204,111 @@
     // ============== AI-LEADING ==============
     { side:'ai',
       label:'Multiple-choice PhD-level science',
-      sub:'GPQA Diamond',
+      sub:'GPQA Diamond benchmark',
       ai:93, human:65,
       insight:'GPT-5.2 Pro beats PhD experts WITH internet access. Knowledge benchmarks are saturating.',
-      src:'OpenAI 2025; Rein et al. 2023' },
+      src:'GPQA paper (Rein et al. 2023) + OpenAI 2025',
+      url:'https://arxiv.org/abs/2311.12022' },
     { side:'ai',
       label:'Competitive programming',
-      sub:'Codeforces Elo (normalized)',
+      sub:'Codeforces Elo rating',
       ai:91, human:80,
       insight:'OpenAI o3 hit 2727 Elo — top ~0.1% of human competitive programmers. Above ICPC finalists.',
-      src:'Codeforces, OpenAI 2025' },
+      src:'Codeforces / OpenAI 2025',
+      url:'https://codeforces.com/blog/entry/133874' },
     { side:'ai',
       label:'Software engineering tasks',
       sub:'SWE-bench Verified',
       ai:94, human:75,
       insight:'Claude Mythos resolves 93.9% of verified GitHub issues. Real-world engineers solve ~75% under similar evals.',
-      src:'SWE-bench leaderboard 2026' },
+      src:'SWE-bench Verified leaderboard',
+      url:'https://www.swebench.com/verified.html' },
     { side:'ai',
       label:'Olympiad math (IMO)',
-      sub:'2025 IMO score 35/42',
+      sub:'IMO 2025, score 35/42',
       ai:83, human:78,
       insight:'DeepMind & OpenAI both hit gold (35/42). Only top ~11% of human competitors earned gold in 2025.',
-      src:'IMO 2025; DeepMind/OpenAI' },
+      src:'IMO 2025 coverage',
+      url:'https://garymarcus.substack.com/p/deepmind-and-openai-achieve-imo-gold' },
     { side:'ai',
       label:'Speed per research task',
       sub:'time-to-attempt, inverted',
       ai:98, human:15,
       insight:'A PhD takes 3-5 hours per FrontierScience-Research problem. AI returns an attempt in seconds.',
-      src:'OpenAI FrontierScience 2025' },
+      src:'OpenAI FrontierScience paper',
+      url:'https://arxiv.org/abs/2601.21165' },
     { side:'ai',
       label:'Scale & parallelism',
       sub:'concurrent attempts',
       ai:97, human:8,
-      insight:'AI can run 1000s of independent attempts simultaneously. AlphaFold predicted 200M+ proteins.',
-      src:'DeepMind AlphaFold DB' },
+      insight:'AI can run 1000s of independent attempts simultaneously. AlphaFold predicted 200M+ proteins — would take hundreds of millions of years in the lab.',
+      src:'DeepMind AlphaFold: 5 years of impact',
+      url:'https://deepmind.google/blog/alphafold-five-years-of-impact/' },
     { side:'ai',
       label:'Olympiad-style closed-form science',
       sub:'FrontierScience-Olympiad',
       ai:77, human:72,
       insight:'GPT-5.2 at 77% on adversarial problems written by olympiad medalists, designed to break frontier models.',
-      src:'OpenAI FrontierScience 2025' },
+      src:'OpenAI FrontierScience paper',
+      url:'https://arxiv.org/abs/2601.21165' },
 
     // ============== HUMAN-LEADING ==============
     { side:'human',
       label:'Open-ended research reasoning',
-      sub:'FrontierScience-Research (≥7/10)',
+      sub:'FrontierScience-Research (≥7/10 rubric)',
       ai:25, human:85,
       insight:'The headline gap. GPT-5.2 clears the rubric on only 15 of 60 PhD-designed Research problems.',
-      src:'OpenAI FrontierScience 2025' },
+      src:'OpenAI FrontierScience paper',
+      url:'https://arxiv.org/abs/2601.21165' },
     { side:'human',
       label:'Frontier mathematics',
       sub:'FrontierMath Tier 4',
       ai:6, human:90,
       insight:'Research-level math problems that take human mathematicians days. Best AI: 6.3%. Most models: 0%.',
-      src:'Epoch AI FrontierMath 2025' },
+      src:'Epoch AI / FrontierMath',
+      url:'https://epoch.ai/frontiermath' },
     { side:'human',
       label:'Humanity’s Last Exam',
       sub:'expert-written hardest questions',
       ai:45, human:90,
       insight:'AI climbed from 8% (Jan 2025) → 44.7% (May 2026). Human experts still average ~90% in their fields.',
-      src:'CAIS / Scale AI HLE leaderboard' },
+      src:'CAIS / Scale AI HLE leaderboard',
+      url:'https://agi.safe.ai/' },
     { side:'human',
       label:'Novel adaptive reasoning',
       sub:'ARC-AGI-3 (interactive)',
       ai:1, human:100,
       insight:'New 2026 benchmark: every frontier model <1%. Humans solve 100%. Replaces memorized patterns with novel environments.',
-      src:'ARC Prize 2026' },
+      src:'ARC Prize 2026',
+      url:'https://arcprize.org/' },
     { side:'human',
       label:'Hard diagnostic radiology',
       sub:'Radiology Last Exam (RadLE)',
       ai:30, human:83,
       insight:'Board-certified radiologists at 83%; GPT-5 at 30%. AI also produces ~75× more false positives on emergency hemorrhage.',
-      src:'RadLE 2025; ICH study' },
+      src:'RadLE preprint, 2025',
+      url:'https://arxiv.org/pdf/2509.25559' },
     { side:'human',
       label:'Niche subfield expertise',
       sub:'weak-value, Marcus theory, kinetics…',
       ai:22, human:90,
       insight:'FrontierScience paper’s top failure mode: AI substitutes a related-but-wrong concept under expert scrutiny.',
-      src:'OpenAI FrontierScience 2025' },
+      src:'OpenAI FrontierScience paper',
+      url:'https://arxiv.org/abs/2601.21165' },
     { side:'human',
       label:'Novel hypothesis / ideation',
       sub:'autonomous research agents',
       ai:15, human:92,
       insight:'Sakana AI Scientist v2 got a workshop paper published, but 42% of experiments failed; novelty claims often wrong.',
-      src:'Sakana AI 2025; arXiv 2502.14297' },
+      src:'Sakana AI Scientist evaluation',
+      url:'https://arxiv.org/abs/2502.14297' },
     { side:'human',
       label:'Wet-lab / physical experiment',
       sub:'real-world interaction',
       ai:0, human:100,
       insight:'FrontierScience’s own limitations section concedes: text-only. AI cannot run an experiment, sample blood, or focus a microscope.',
-      src:'OpenAI FrontierScience 2025 §4' },
+      src:'OpenAI FrontierScience paper, §4',
+      url:'https://arxiv.org/abs/2601.21165' },
   ];
 
   // ===== Layout =====
@@ -343,11 +361,13 @@
   // Tooltip
   const tip = document.getElementById('tip');
   const showTip = (e, d) => {
-    tip.innerHTML = `<b>${d.label}</b><div style="color:var(--mute);font-size:10.5px;margin-top:2px">${d.sub}</div>
+    tip.innerHTML = `<b>${d.label}</b>
+      <div class="tt-sub">${d.sub}</div>
       <div class="tt-row"><span>AI score</span><span class="tt-ai">${d.ai}</span></div>
       <div class="tt-row"><span>Human-expert score</span><span class="tt-h">${d.human}</span></div>
       <div class="tt-insight">${d.insight}</div>
-      <div class="tt-src">Source: ${d.src}</div>`;
+      <div class="tt-src">${d.src} <span class="arrow">&rarr;</span></div>
+      <div style="color:var(--mute);font-size:10px;margin-top:3px">click to open source in new tab</div>`;
     tip.style.display = 'block';
     const r = tip.getBoundingClientRect();
     let x = e.clientX + 14, y = e.clientY + 14;
@@ -356,6 +376,13 @@
     tip.style.left = x + 'px'; tip.style.top = y + 'px';
   };
   const hideTip = () => { tip.style.display = 'none'; };
+  const openSrc = (d) => { if (d.url) window.open(d.url, '_blank', 'noopener'); };
+  const wire = (el, d) => {
+    el.addEventListener('mousemove', e => showTip(e, d));
+    el.addEventListener('mouseleave', hideTip);
+    el.addEventListener('click', () => openSrc(d));
+    el.style.cursor = 'pointer';
+  };
 
   data.forEach((d, i) => {
     const y = PAD.t + i * rowH + (rowH - barH) / 2;
@@ -368,16 +395,14 @@
       x: aiX, y, width: aiLen, height: barH,
       fill:'var(--ai-soft)', stroke:'var(--ai-edge)', 'stroke-width':1, rx:3, class:'bar'
     });
-    aiBar.addEventListener('mousemove', e => showTip(e, d));
-    aiBar.addEventListener('mouseleave', hideTip);
+    wire(aiBar, d);
     svg.appendChild(aiBar);
 
     const aiFill = mk('rect', {
       x: aiX, y: y + barH*0.18, width: aiLen, height: barH*0.64,
       fill:'var(--ai)', opacity: d.ai/100 * 0.85 + 0.15, rx:2, class:'bar'
     });
-    aiFill.addEventListener('mousemove', e => showTip(e, d));
-    aiFill.addEventListener('mouseleave', hideTip);
+    wire(aiFill, d);
     svg.appendChild(aiFill);
 
     svg.appendChild(mk('text', {
@@ -391,16 +416,14 @@
       x: humanZoneStart, y, width: hLen, height: barH,
       fill:'var(--human-soft)', stroke:'var(--human-edge)', 'stroke-width':1, rx:3, class:'bar'
     });
-    hBar.addEventListener('mousemove', e => showTip(e, d));
-    hBar.addEventListener('mouseleave', hideTip);
+    wire(hBar, d);
     svg.appendChild(hBar);
 
     const hFill = mk('rect', {
       x: humanZoneStart, y: y + barH*0.18, width: hLen, height: barH*0.64,
       fill:'var(--human)', opacity: d.human/100 * 0.85 + 0.15, rx:2, class:'bar'
     });
-    hFill.addEventListener('mousemove', e => showTip(e, d));
-    hFill.addEventListener('mouseleave', hideTip);
+    wire(hFill, d);
     svg.appendChild(hFill);
 
     svg.appendChild(mk('text', {
@@ -408,15 +431,13 @@
       fill: d.side==='human' ? 'var(--human)' : 'var(--mute)', class:'bar-val'
     }, d.human));
 
-    // Center label
-    const winner = d.side;
-    svg.appendChild(mk('text', {
-      x: center, y: cy - 2, 'text-anchor':'middle', class:'bar-label',
-      fill: winner === 'ai' ? '#cfeee9' : '#f3d9b6'
-    }, d.label));
-    svg.appendChild(mk('text', {
-      x: center, y: cy + 11, 'text-anchor':'middle', class:'bar-sub'
-    }, d.sub));
+    // Center label (single line, no on-chart subtitle)
+    const labelEl = mk('text', {
+      x: center, y: cy + 4, 'text-anchor':'middle', class:'bar-label',
+      fill: d.side === 'ai' ? '#cfeee9' : '#f3d9b6'
+    }, d.label);
+    wire(labelEl, d);
+    svg.appendChild(labelEl);
   });
 })();
 </script>
