@@ -3,10 +3,10 @@
 Two views on OpenAI's FrontierScience evaluation (paper: [arXiv 2601.21165](https://arxiv.org/abs/2601.21165);
 dataset: [openai/frontierscience on HF](https://huggingface.co/datasets/openai/frontierscience)):
 
-1. **A 9-section narrative deep dive** into the paper itself.
-2. **A single-slide stakeholder view** placing FrontierScience inside the broader
+1. **A single-slide stakeholder view** placing FrontierScience inside the broader
    AI-vs-human-researcher landscape (GPQA, HLE, FrontierMath, SWE-bench, IMO,
-   Codeforces, ARC-AGI, RadLE, METR, AlphaFold).
+   Codeforces, ARC-AGI, RadLE, METR, AlphaFold). **This is the landing page (`index.html`).**
+2. **A 9-section narrative deep dive** into the paper itself (`data_story.html`).
 
 ## What's the story?
 
@@ -30,9 +30,10 @@ while still trailing humans on open-ended research work
 
 ## How to view
 
-Open `index.html` in any modern browser. The dataset is embedded inline
-(no network needed at view-time, no build step). The top nav links to the
-two companion pages.
+Open `index.html` in any modern browser. You'll land on the stakeholder
+slide; footer links take you to the methodology page and the full data
+story. Everything is self-contained — no network needed at view-time, no
+build step.
 
 ```
 # Windows
@@ -55,35 +56,26 @@ python -c "import urllib.request as u; base='https://huggingface.co/datasets/ope
 
 | File | Purpose |
 |---|---|
-| `index.html` | The original 9-section data story; self-contained, ~600 kB. Top nav links to the slide and about page. |
-| `frontier_ai_vs_humans.html` | Single-slide, presentation-ready view of where AI stands vs human researchers across 14 capabilities. Diverging bar chart + shock-strip stats + nuance cards. Fits one screen, no scrolling. |
+| `index.html` | **Landing page.** Single-slide, presentation-ready view of where AI stands vs human researchers across 14 capabilities. Overlapping bar chart, sorted by AI score. Fits one screen, no scrolling. |
 | `frontier_ai_vs_humans_about.html` | Companion explainer for the slide: design rationale, full data table with sources for every bar, methodology, honest caveats, who it's useful for. |
+| `data_story.html` | The original 9-section data story walking through the FrontierScience paper; self-contained, ~600 kB. Top nav links back to the slide and the about page. |
 | `data/olympiad_test.jsonl` | 100 Olympiad problems (raw HF dataset). |
 | `data/research_test.jsonl` | 60 Research problems (raw HF dataset). |
-| `data.json` | Merged + rubric-parsed payload that gets embedded into `index.html`. |
+| `data.json` | Merged + rubric-parsed payload that gets embedded into `data_story.html`. |
 | `paper.txt` | Extracted text of the FrontierScience paper for reference. |
 | `Task.md` | Original task spec. |
 
 ## Navigation between pages
 
-All three pages cross-link via the sticky top nav in `index.html` and via
-footer links in the two slide pages. You can land on any of them and
-navigate to the others without re-opening files.
+All three pages cross-link:
+
+- **Slide → about & data story**: footer of `index.html`.
+- **Data story → slide & about**: sticky top nav in `data_story.html`.
+- **About → slide & data story**: nav buttons at the top and bottom of `frontier_ai_vs_humans_about.html`.
 
 ## Methodology notes
 
-**On `index.html` (the data story)**
-
-- All charts on the page that derive from the **dataset** (subject mix,
-  answer-length distribution, rubric anatomy) are computed live from the
-  released JSONL files at page load.
-- Charts that derive from the **paper** (GPT-5.2 scores, reasoning-effort
-  endpoints, head-to-head) only show numbers quoted verbatim in the paper
-  text. Bars whose heights I could only estimate by eyeballing Figure 6 are
-  intentionally omitted rather than fabricated.
-- Sources for every claim are linked at the bottom of `index.html`.
-
-**On `frontier_ai_vs_humans.html` (the stakeholder slide)**
+**On `index.html` (the stakeholder slide)**
 
 - **AI scores** are taken from the top frontier model on each benchmark as
   of May 2026, quoted verbatim from public leaderboards or papers
@@ -97,6 +89,18 @@ navigate to the others without re-opening files.
   was run; we're upfront about that in the about page.
 - Every bar's source is cited in the tooltip and in the full data table on
   `frontier_ai_vs_humans_about.html`.
+- Bars are clickable — each one opens its source in a new tab.
+
+**On `data_story.html` (the FrontierScience paper deep dive)**
+
+- All charts on the page that derive from the **dataset** (subject mix,
+  answer-length distribution, rubric anatomy) are computed live from the
+  released JSONL files at page load.
+- Charts that derive from the **paper** (GPT-5.2 scores, reasoning-effort
+  endpoints, head-to-head) only show numbers quoted verbatim in the paper
+  text. Bars whose heights I could only estimate by eyeballing Figure 6 are
+  intentionally omitted rather than fabricated.
+- Sources for every claim are linked at the bottom of `data_story.html`.
 
 ## Key data sources for the stakeholder slide
 
